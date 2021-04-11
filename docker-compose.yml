@@ -1,10 +1,14 @@
 version: '3'
 services:
-  backend:
+  go:
     build: .
     volumes:
       - ./:/go/src/app
     ports: 
       - "5000:5000"
+    environment:
+      REDIS_HOST: redis
+    tty: true
   db:
+    container_name: redis
     image: redis:alpine
