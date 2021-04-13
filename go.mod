@@ -1,5 +1,5 @@
-module github.com/Lettuce222/RecipeDealer
+module app
 
 go 1.16
 
-require github.com/go-redis/redis/v8 v8.8.0
+require github.com/lib/pq v1.10.0
