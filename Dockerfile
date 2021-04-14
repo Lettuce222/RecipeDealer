@@ -4,5 +4,6 @@ ADD . ./
 ENV GO111MODULE=on\
     GOPROXY=https://proxy.golang.org,direct
 RUN go get gorm.io/driver/postgres\
-           gorm.io/gorm
+           gorm.io/gorm\
+           github.com/gin-gonic/gin
 CMD go mod tidy && go run main.go
