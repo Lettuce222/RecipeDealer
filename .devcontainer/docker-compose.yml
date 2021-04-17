@@ -1,0 +1,4 @@
+services:
+    go:
+      volumes:
+        - .:/workspace:cached

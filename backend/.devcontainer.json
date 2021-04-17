@@ -1,0 +1,14 @@
+{
+    "name": "container backend",
+    "dockerComposeFile": [
+        "../docker-compose.yml",
+        "../.devcontainer/docker-compose.yml"
+    ],
+    "service": "go",
+    "workspaceFolder": "/workspace/backend",
+    "shutdownAction": "none",
+    "extensions": [
+        "golang.go",
+        "golang.go-nightly",
+    ],
+}
