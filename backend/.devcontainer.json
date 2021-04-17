@@ -1,4 +1,4 @@
-{
+do{
     "name": "container backend",
     "dockerComposeFile": [
         "../docker-compose.yml",
@@ -11,4 +11,7 @@
         "golang.go",
         "golang.go-nightly",
     ],
+    "settings": { 
+        "go.useLanguageServer": true
+    },
 }
