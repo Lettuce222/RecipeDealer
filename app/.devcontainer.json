@@ -1,11 +1,11 @@
-do{
-    "name": "container backend",
+{
+    "name": "container app",
     "dockerComposeFile": [
         "../docker-compose.yml",
         "../.devcontainer/docker-compose.yml"
     ],
     "service": "go",
-    "workspaceFolder": "/workspace/backend",
+    "workspaceFolder": "/workspace/app",
     "shutdownAction": "none",
     "extensions": [
         "golang.go",
