@@ -1,6 +1,6 @@
 package entity
 
 type Quantity struct {
-	Data float32
-	Unit string
+	Number float32
+	Unit   string
 }
