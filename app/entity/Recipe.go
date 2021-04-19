@@ -1,7 +1,7 @@
 package entity
 
 type Recipe struct {
-	Id         Id
+	ID         ID
 	Name       string
 	Procedures []Procedure
 }

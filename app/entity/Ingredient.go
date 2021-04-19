@@ -1,7 +1,7 @@
 package entity
 
 type Ingredient struct {
-	Id   int
+	ID   int
 	Name string
 	Quantity
 }

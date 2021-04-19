@@ -1,7 +1,7 @@
 package entity
 
 type Procedure struct {
-	Id     int
+	ID     ID
 	Action string
 	Inputs []Food
 	Output Food
