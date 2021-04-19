@@ -1,7 +1,7 @@
 package entity
 
 type Procedure struct {
-	ID ID
+	ID uint
 	ProcedureBody
 }
 

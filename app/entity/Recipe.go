@@ -1,7 +1,7 @@
 package entity
 
 type Recipe struct {
-	ID ID
+	ID uint
 	RecipeBody
 }
 
