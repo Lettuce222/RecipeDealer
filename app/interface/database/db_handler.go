@@ -1,8 +1,16 @@
 package database
 
+import (
+	"reflect"
+
+	"gorm.io/gorm"
+)
+
 type DbHandler interface {
-	Create(value interface{}, arg ...interface{}) (Result, error)
-	Read(value interface{}, arg ...interface{}) (Result, error)
-	Update(value interface{}, arg ...interface{}) (Result, error)
-	Delete(value interface{}, arg ...interface{}) (Result, error)
+	Create(value interface{}) error
+	Update(identifier uint, value interface{}, columns []string) error
+	Delete(identifier uint, model reflect.Type) error
+
+	Show(model reflect.Type) (*gorm.DB, error)
+	Find(identifier uint, model reflect.Type) (*gorm.DB, error)
 }

@@ -1,10 +1,10 @@
 package infrastructure
 
 import (
+	"reflect"
+
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
-
-	"github.com/Lettuce222/RecipeDealer/interface/database"
 )
 
 type DbHandler struct {
@@ -22,7 +22,27 @@ func NewDbHandler() *DbHandler {
 	return &DbHandler{Db: db}
 }
 
-func (hander *DbHandler) Create(value interface{}, args ...interface{}) (*database.Result, error) {
-	result := hander.Db.Create(&value)
-	return &database.Result{Value: value, Count: result.RowsAffected}, result.Error
+func (hander *DbHandler) Create(value interface{}) error {
+	result := hander.Db.Create(value)
+	return result.Error
+}
+
+func (hander *DbHandler) Update(identifier uint, value interface{}, columns []string) error {
+	result := hander.Db.Model(&value).Where("ID = ?", identifier).Updates(value)
+	return result.Error
+}
+
+func (hander *DbHandler) Delete(identifier uint, model reflect.Type) error {
+	result := hander.Db.Delete(model, identifier)
+	return result.Error
+}
+
+func (hander *DbHandler) Show(model reflect.Type) (*gorm.DB, error) {
+	result := hander.Db.Find(model)
+	return result, result.Error
+}
+
+func (hander *DbHandler) Find(identifier uint, model reflect.Type) (*gorm.DB, error) {
+	result := hander.Db.First(model, identifier)
+	return result, result.Error
 }
