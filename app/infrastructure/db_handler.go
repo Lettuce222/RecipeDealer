@@ -3,6 +3,7 @@ package infrastructure
 import (
 	"reflect"
 
+	"github.com/Lettuce222/RecipeDealer/interface/database"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -18,6 +19,8 @@ func NewDbHandler() *DbHandler {
 	if err != nil {
 		panic(err)
 	}
+
+	db.AutoMigrate(&database.IngredientRecord{})
 
 	return &DbHandler{Db: db}
 }
@@ -37,12 +40,14 @@ func (hander *DbHandler) Delete(identifier uint, model reflect.Type) error {
 	return result.Error
 }
 
-func (hander *DbHandler) Show(model reflect.Type) (*gorm.DB, error) {
-	result := hander.Db.Find(model)
-	return result, result.Error
+func (hander *DbHandler) Show(model reflect.Type) (reflect.Value, error) {
+	records := reflect.MakeSlice(reflect.SliceOf(model), 1, 1)
+	result := hander.Db.Model(reflect.New(model)).Find(&records)
+	return records, result.Error
 }
 
-func (hander *DbHandler) Find(identifier uint, model reflect.Type) (*gorm.DB, error) {
-	result := hander.Db.First(model, identifier)
-	return result, result.Error
+func (hander *DbHandler) Find(identifier uint, model reflect.Type) (reflect.Value, error) {
+	record := reflect.New(model)
+	result := hander.Db.First(record, identifier)
+	return record, result.Error
 }

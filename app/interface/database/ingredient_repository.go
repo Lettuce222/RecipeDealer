@@ -4,7 +4,6 @@ import (
 	"reflect"
 
 	"github.com/Lettuce222/RecipeDealer/entity"
-	"gorm.io/gorm"
 )
 
 type IngredientRepository struct {
@@ -13,7 +12,7 @@ type IngredientRepository struct {
 
 func (repo *IngredientRepository) Create(ingredient entity.Ingredient) error {
 	err := repo.DbHandler.Create(
-		NewGormIngredient(ingredient.Name, ingredient.Number, ingredient.Unit),
+		NewIngredientRecord(ingredient.Name, ingredient.Number, ingredient.Unit),
 	)
 	return err
 }
@@ -21,57 +20,53 @@ func (repo *IngredientRepository) Create(ingredient entity.Ingredient) error {
 func (repo *IngredientRepository) Update(ingredient entity.Ingredient) error {
 	err := repo.DbHandler.Update(
 		ingredient.ID,
-		NewGormIngredient(ingredient.Name, ingredient.Number, ingredient.Unit),
+		NewIngredientRecord(ingredient.Name, ingredient.Number, ingredient.Unit),
 		[]string{"Name", "Number", "Unit"},
 	)
 	return err
 }
 
 func (repo *IngredientRepository) Delete(identifier uint) error {
-	err := repo.DbHandler.Delete(identifier, reflect.TypeOf(GormIngredient{}))
+	err := repo.DbHandler.Delete(identifier, reflect.TypeOf(IngredientRecord{}))
 	return err
 }
 
 func (repo *IngredientRepository) Show() ([]*entity.Ingredient, error) {
-	rows, err := repo.DbHandler.Show(reflect.TypeOf(GormIngredient{}))
+	ingredientRecords := []IngredientRecord{}
+	_, err := repo.DbHandler.Show(reflect.TypeOf(IngredientRecord{}))
 	if err != nil {
 		return nil, err
 	}
 
-	gormIngredients := []GormIngredient{}
-	rows.Scan(&gormIngredients)
-
 	ingredients := []*entity.Ingredient{}
-	for _, gormIngredient := range gormIngredients {
+	for _, ingredientRecord := range ingredientRecords {
 		ingredients = append(
 			ingredients,
-			entity.NewIngredient(gormIngredient.ID, gormIngredient.Name, gormIngredient.Number, gormIngredient.Unit),
+			entity.NewIngredient(ingredientRecord.ID, ingredientRecord.Name, ingredientRecord.Number, ingredientRecord.Unit),
 		)
 	}
 	return ingredients, nil
 }
 
 func (repo *IngredientRepository) Find(identifier uint) (*entity.Ingredient, error) {
-	row, err := repo.DbHandler.Find(identifier, reflect.TypeOf(GormIngredient{}))
+	ingredientRecord := IngredientRecord{}
+	_, err := repo.DbHandler.Find(identifier, reflect.TypeOf(IngredientRecord{}))
 	if err != nil {
 		return nil, err
 	}
 
-	gormIngredient := GormIngredient{}
-	row.Scan(&gormIngredient)
-
-	ingredient := entity.NewIngredient(gormIngredient.ID, gormIngredient.Name, gormIngredient.Number, gormIngredient.Unit)
+	ingredient := entity.NewIngredient(ingredientRecord.ID, ingredientRecord.Name, ingredientRecord.Number, ingredientRecord.Unit)
 
 	return ingredient, nil
 }
 
-type GormIngredient struct {
-	gorm.Model
+type IngredientRecord struct {
+	Model
 	entity.IngredientBody
 }
 
-func NewGormIngredient(Name string, Number float32, Unit string) *GormIngredient {
-	return &GormIngredient{
+func NewIngredientRecord(Name string, Number float32, Unit string) *IngredientRecord {
+	return &IngredientRecord{
 		IngredientBody: entity.IngredientBody{
 			Name: Name,
 			Quantity: entity.Quantity{

@@ -1,9 +1,9 @@
 package database
 
 import (
+	"database/sql"
 	"reflect"
-
-	"gorm.io/gorm"
+	"time"
 )
 
 type DbHandler interface {
@@ -11,6 +11,13 @@ type DbHandler interface {
 	Update(identifier uint, value interface{}, columns []string) error
 	Delete(identifier uint, model reflect.Type) error
 
-	Show(model reflect.Type) (*gorm.DB, error)
-	Find(identifier uint, model reflect.Type) (*gorm.DB, error)
+	Show(model reflect.Type) (reflect.Value, error)
+	Find(identifier uint, model reflect.Type) (reflect.Value, error)
+}
+
+type Model struct {
+	ID        uint
+	CreatedAt time.Time
+	UpdatedAt time.Time
+	DeletedAt sql.NullTime
 }
