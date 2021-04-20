@@ -1,7 +1,7 @@
 package infrastructure
 
 import (
-	"reflect"
+	"database/sql"
 
 	"github.com/Lettuce222/RecipeDealer/interface/database"
 	"gorm.io/driver/postgres"
@@ -35,19 +35,33 @@ func (hander *DbHandler) Update(identifier uint, value interface{}, columns []st
 	return result.Error
 }
 
-func (hander *DbHandler) Delete(identifier uint, model reflect.Type) error {
-	result := hander.Db.Delete(model, identifier)
+func (hander *DbHandler) Delete(identifier uint, tableName string) error {
+	result := hander.Db.Delete(tableName, identifier)
 	return result.Error
 }
 
-func (hander *DbHandler) Show(model reflect.Type) (reflect.Value, error) {
-	records := reflect.MakeSlice(reflect.SliceOf(model), 1, 1)
-	result := hander.Db.Model(reflect.New(model)).Find(&records)
-	return records, result.Error
+func (hander *DbHandler) Show(tableName string, columnName string) (database.Rows, error) {
+	rows, err := hander.Db.Table(tableName).Select(columnName).Rows()
+	return SqlRows{Rows: rows}, err
 }
 
-func (hander *DbHandler) Find(identifier uint, model reflect.Type) (reflect.Value, error) {
-	record := reflect.New(model)
-	result := hander.Db.First(record, identifier)
-	return record, result.Error
+func (hander *DbHandler) Find(identifier uint, tableName string, columnName string) (row database.Row) {
+	row = hander.Db.Table(tableName).Where("id = ?", identifier).Select(columnName).Row()
+	return
+}
+
+type SqlRows struct {
+	Rows *sql.Rows
+}
+
+func (r SqlRows) Scan(dst ...interface{}) error {
+	return r.Rows.Scan(dst...)
+}
+
+func (r SqlRows) Next() bool {
+	return r.Rows.Next()
+}
+
+func (r SqlRows) Close() error {
+	return r.Rows.Close()
 }

@@ -2,17 +2,16 @@ package database
 
 import (
 	"database/sql"
-	"reflect"
 	"time"
 )
 
 type DbHandler interface {
 	Create(value interface{}) error
 	Update(identifier uint, value interface{}, columns []string) error
-	Delete(identifier uint, model reflect.Type) error
+	Delete(identifier uint, tableName string) error
 
-	Show(model reflect.Type) (reflect.Value, error)
-	Find(identifier uint, model reflect.Type) (reflect.Value, error)
+	Show(tableName string, columnName string) (Rows, error)
+	Find(identifier uint, tableName string, columnName string) Row
 }
 
 type Model struct {
@@ -20,4 +19,14 @@ type Model struct {
 	CreatedAt time.Time
 	UpdatedAt time.Time
 	DeletedAt sql.NullTime
+}
+
+type Rows interface {
+	Close() error
+	Next() bool
+	Scan(dest ...interface{}) error
+}
+
+type Row interface {
+	Scan(...interface{}) error
 }
