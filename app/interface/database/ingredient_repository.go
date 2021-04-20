@@ -18,9 +18,9 @@ func (repo *IngredientRepository) Create(ingredient entity.Ingredient) error {
 	return err
 }
 
-func (repo *IngredientRepository) Update(identifier uint, ingredient entity.Ingredient) error {
+func (repo *IngredientRepository) Update(ingredient entity.Ingredient) error {
 	err := repo.DbHandler.Update(
-		identifier,
+		ingredient.ID,
 		NewGormIngredient(ingredient.Name, ingredient.Number, ingredient.Unit),
 		[]string{"Name", "Number", "Unit"},
 	)
@@ -73,9 +73,9 @@ type GormIngredient struct {
 func NewGormIngredient(Name string, Number float32, Unit string) *GormIngredient {
 	return &GormIngredient{
 		IngredientBody: entity.IngredientBody{
-			Name,
-			entity.Quantity{
-				Number,
-				Unit,
+			Name: Name,
+			Quantity: entity.Quantity{
+				Number: Number,
+				Unit:   Unit,
 			}}}
 }
