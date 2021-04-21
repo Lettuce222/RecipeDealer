@@ -6,17 +6,17 @@ type IngredientInteractor struct {
 	IngredientRepository IngredientRepository
 }
 
-func (interactor *IngredientInteractor) Add(ingredient entity.Ingredient) (err error) {
+func (interactor *IngredientInteractor) Add(ingredient *entity.Ingredient) (err error) {
 	err = interactor.IngredientRepository.Create(ingredient)
 	return
 }
 
-func (interactor *IngredientInteractor) Update(ingredient entity.Ingredient) (err error) {
+func (interactor *IngredientInteractor) Update(ingredient *entity.Ingredient) (err error) {
 	err = interactor.IngredientRepository.Update(ingredient)
 	return
 }
 
-func (interactor *IngredientInteractor) Remove(ingredient entity.Ingredient) (err error) {
+func (interactor *IngredientInteractor) Remove(ingredient *entity.Ingredient) (err error) {
 	err = interactor.IngredientRepository.Delete(ingredient.ID)
 	return
 }

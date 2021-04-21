@@ -10,18 +10,18 @@ type IngredientRepository struct {
 
 var ingredientTableName = "ingredient_records"
 
-func (repo *IngredientRepository) Create(ingredient entity.Ingredient) error {
+func (repo *IngredientRepository) Create(ingredient *entity.Ingredient) error {
 	err := repo.DbHandler.Create(
 		NewIngredientRecord(ingredient.Name, ingredient.Number, ingredient.Unit),
 	)
 	return err
 }
 
-func (repo *IngredientRepository) Update(ingredient entity.Ingredient) error {
+func (repo *IngredientRepository) Update(ingredient *entity.Ingredient) error {
 	err := repo.DbHandler.Update(
 		ingredient.ID,
-		NewIngredientRecord(ingredient.Name, ingredient.Number, ingredient.Unit),
-		[]string{"Name", "Number", "Unit"},
+		map[string]interface{}{"name": ingredient.Name, "number": ingredient.Number, "unit": ingredient.Unit},
+		ingredientTableName,
 	)
 	return err
 }

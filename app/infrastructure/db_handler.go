@@ -30,13 +30,13 @@ func (hander *DbHandler) Create(value interface{}) error {
 	return result.Error
 }
 
-func (hander *DbHandler) Update(identifier uint, value interface{}, columns []string) error {
-	result := hander.Db.Model(&value).Where("ID = ?", identifier).Updates(value)
+func (hander *DbHandler) Update(identifier uint, value map[string]interface{}, tableName string) error {
+	result := hander.Db.Table(tableName).Where("ID = ?", identifier).Updates(value)
 	return result.Error
 }
 
 func (hander *DbHandler) Delete(identifier uint, tableName string) error {
-	result := hander.Db.Delete(tableName, identifier)
+	result := hander.Db.Table(tableName).Where("id = ?", identifier).Delete(identifier) // Deleteの引数に消されたものが入る？
 	return result.Error
 }
 

@@ -7,7 +7,7 @@ import (
 
 type DbHandler interface {
 	Create(value interface{}) error
-	Update(identifier uint, value interface{}, columns []string) error
+	Update(identifier uint, value map[string]interface{}, tableName string) error
 	Delete(identifier uint, tableName string) error
 
 	Show(tableName string, columnName string) (Rows, error)
