@@ -82,12 +82,12 @@ type IngredientRecord struct {
 	entity.IngredientBody
 }
 
-func NewIngredientRecord(Name string, Number float32, Unit string) *IngredientRecord {
+func NewIngredientRecord(name string, number float32, unit string) *IngredientRecord {
 	return &IngredientRecord{
 		IngredientBody: entity.IngredientBody{
-			Name: Name,
+			Name: name,
 			Quantity: entity.Quantity{
-				Number: Number,
-				Unit:   Unit,
+				Number: number,
+				Unit:   unit,
 			}}}
 }

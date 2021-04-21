@@ -7,22 +7,29 @@ import (
 
 func Run() {
 	router := gin.Default()
-	controller := controller.NewIngredientController(NewDbHandler())
 
+	// Ingredient
+	ingredientController := controller.NewIngredientController(NewDbHandler())
 	router.POST("/ingredients", func(c *gin.Context) {
-		controller.Create(c)
+		ingredientController.Create(c)
 	})
 	router.GET("/ingredients", func(c *gin.Context) {
-		controller.Index(c)
+		ingredientController.Index(c)
 	})
 	router.GET("/ingredients/:id", func(c *gin.Context) {
-		controller.Find(c)
+		ingredientController.Find(c)
 	})
 	router.PUT("/ingredients", func(c *gin.Context) {
-		controller.Update(c)
+		ingredientController.Update(c)
 	})
 	router.DELETE("/ingredients/:id", func(c *gin.Context) {
-		controller.Remove(c)
+		ingredientController.Remove(c)
+	})
+
+	// Procedure
+	procedureController := controller.NewProcedureController(NewDbHandler())
+	router.POST("/procedures", func(c *gin.Context) {
+		procedureController.Create(c)
 	})
 
 	router.Run(":5000")
