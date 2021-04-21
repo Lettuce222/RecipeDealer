@@ -9,9 +9,7 @@ type ProcedureRepository struct {
 var procedureTableName = "procedure_records"
 
 func (repo *ProcedureRepository) Create(p *entity.Procedure) error {
-	// err := repo.DbHandler.Create(
-	// 	NewProcedureRecord(p.Action, p.Inputs, p.Output),
-	// )
+	// err := repo.DbHandler.Create(pr)
 	return nil
 }
 
@@ -78,21 +76,16 @@ func (repo *ProcedureRepository) Find(identifier uint) (*entity.Procedure, error
 
 type ProcedureRecord struct {
 	Model
-	Action string
-	Inputs []FoodRecord `gorm:"foreignKey:InputProcedureID"`
-	Output FoodRecord   `gorm:"foreignKey:OutputProcedureID"`
+	Action            string
+	Ingredients       []IngredientRecord
+	InputProcedures   []ProcedureRecord
+	ProcedureRecordId uint
 }
 
-func NewProcedureRecord(action string, inputs []FoodRecord, output FoodRecord) *ProcedureRecord {
+func NewProcedureRecord(action string, ingredients []IngredientRecord, inputProcedures []ProcedureRecord) *ProcedureRecord {
 	return &ProcedureRecord{
-		Action: action,
-		Inputs: inputs,
-		Output: output,
+		Action:          action,
+		Ingredients:     ingredients,
+		InputProcedures: inputProcedures,
 	}
-}
-
-type FoodRecord struct {
-	Model
-	InputProcedureID  uint
-	OutputProcedureID uint
 }

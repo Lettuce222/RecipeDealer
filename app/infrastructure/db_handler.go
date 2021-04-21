@@ -23,7 +23,6 @@ func NewDbHandler() *DbHandler {
 	db.AutoMigrate(
 		&database.IngredientRecord{},
 		&database.ProcedureRecord{},
-		&database.FoodRecord{},
 	)
 
 	return &DbHandler{Db: db}

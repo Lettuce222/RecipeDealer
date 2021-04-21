@@ -80,6 +80,7 @@ func (repo *IngredientRepository) Find(identifier uint) (*entity.Ingredient, err
 type IngredientRecord struct {
 	Model
 	entity.IngredientBody
+	ProcedureRecordID uint
 }
 
 func NewIngredientRecord(name string, number float32, unit string) *IngredientRecord {

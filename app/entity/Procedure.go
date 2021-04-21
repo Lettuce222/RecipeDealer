@@ -6,7 +6,7 @@ type Procedure struct {
 }
 
 type ProcedureBody struct {
-	Action string
-	Inputs []Food
-	Output Food
+	Action          string
+	Ingredients     []Ingredient
+	InputProcedures []Procedure
 }
