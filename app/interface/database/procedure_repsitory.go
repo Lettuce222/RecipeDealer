@@ -9,8 +9,8 @@ type ProcedureRepository struct {
 var procedureTableName = "procedure_records"
 
 func (repo *ProcedureRepository) Create(p *entity.Procedure) error {
-	// err := repo.DbHandler.Create(pr)
-	return nil
+	err := repo.DbHandler.Create(NewProcedureRecordFromProcedure(p))
+	return err
 }
 
 func (repo *ProcedureRepository) Update(ingredient *entity.Procedure) error {
@@ -78,8 +78,8 @@ type ProcedureRecord struct {
 	Model
 	Action            string
 	Ingredients       []IngredientRecord
-	InputProcedures   []ProcedureRecord
-	ProcedureRecordId uint
+	InputProcedures   []ProcedureRecord `gorm:"foreignkey:ProcedureRecordId"`
+	ProcedureRecordId *uint
 }
 
 func NewProcedureRecord(action string, ingredients []IngredientRecord, inputProcedures []ProcedureRecord) *ProcedureRecord {
@@ -87,5 +87,27 @@ func NewProcedureRecord(action string, ingredients []IngredientRecord, inputProc
 		Action:          action,
 		Ingredients:     ingredients,
 		InputProcedures: inputProcedures,
+	}
+}
+
+func NewProcedureRecordFromProcedure(p *entity.Procedure) *ProcedureRecord {
+	ingredientRecords := []IngredientRecord{}
+	for _, i := range p.Ingredients {
+		ingredientRecords = append(ingredientRecords, *NewIngredientRecord(
+			i.Name,
+			i.Number,
+			i.Unit,
+		))
+	}
+
+	procedureRecords := []ProcedureRecord{}
+	for _, p := range p.InputProcedures {
+		procedureRecords = append(procedureRecords, *NewProcedureRecordFromProcedure(&p))
+	}
+
+	return &ProcedureRecord{
+		Action:          p.Action,
+		Ingredients:     ingredientRecords,
+		InputProcedures: procedureRecords,
 	}
 }
