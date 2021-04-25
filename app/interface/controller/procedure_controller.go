@@ -25,12 +25,17 @@ func NewProcedureController(dbHandler database.DbHandler) *ProcedureController {
 
 func (controller *ProcedureController) Create(c Context) {
 	procedure := &entity.Procedure{}
-	c.Bind(procedure)
-	err := controller.Interactor.Add(procedure)
+	err := c.Bind(procedure)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, fmt.Errorf("Failed to Create Procedure: msg... %w", err))
+		return
+	}
+
+	err = controller.Interactor.Add(procedure)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, fmt.Errorf("Failed to Create Ingredient: msg... %w", err))
 		return
 	}
 
-	c.JSON(http.StatusCreated, fmt.Sprintf("Please Specify ID: ID(%d) is Created", procedure.ID))
+	c.JSON(http.StatusCreated, fmt.Sprintf("Procedure(%s) is Created", procedure.Action))
 }

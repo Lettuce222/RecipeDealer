@@ -26,8 +26,13 @@ func NewIngredientController(dbHandler database.DbHandler) *IngredientController
 
 func (controller *IngredientController) Create(c Context) {
 	ingredient := &entity.Ingredient{}
-	c.Bind(ingredient)
-	err := controller.Interactor.Add(ingredient)
+	err := c.Bind(ingredient)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, fmt.Errorf("Failed to Create Ingredient: msg... %w", err))
+		return
+	}
+
+	err = controller.Interactor.Add(ingredient)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, fmt.Errorf("Failed to Create Ingredient: msg... %w", err))
 		return
@@ -64,8 +69,13 @@ func (controller *IngredientController) Find(c Context) {
 
 func (controller *IngredientController) Update(c Context) {
 	ingredient := &entity.Ingredient{}
-	c.Bind(ingredient)
-	err := controller.Interactor.Update(ingredient)
+	err := c.Bind(ingredient)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, fmt.Errorf("Failed to Update Ingredient: msg... %w", err))
+		return
+	}
+
+	err = controller.Interactor.Update(ingredient)
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, fmt.Errorf("Failed to Update Ingredient: msg... %w", err))
